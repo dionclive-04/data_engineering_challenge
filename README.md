@@ -51,3 +51,26 @@ data_engineering_challenge/
 │
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # Project documentation
+```
+
+⚙️ Installation & Setup
+1️⃣ Clone the repository
+git clone https://github.com/your-username/data_engineering_challenge.git
+cd data_engineering_challenge
+
+2️⃣ Create a virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate     # Mac/Linux
+venv\Scripts\activate        # Windows
+
+3️⃣ Install dependencies
+pip install -r requirements.txt
+
+▶️ Usage
+Run the Indiamart Scraper
+cd tutorial
+scrapy crawl indiamart_api -o ../data/raw/indiamart.json
+
+Run EDA
+python eda/product_eda.py
+
