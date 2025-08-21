@@ -1,108 +1,51 @@
-# 1) Prerequisites
+1) Prerequisites
 
-* **Python** 3.10+
-* **Git** (optional, if you cloned a repo)
+Python** 3.10+
+Git** (optional, if you cloned a repo)
 
-# 2) Create & activate a virtual environment
+
+2) Create & activate a virtual environment
 
 Open **VS Code Terminal** (PowerShell) in your project root (`C:\Users\ACER\OneDrive\Desktop\tutorial`):
 
-```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-```
 
 (If PowerShell blocks it, run once: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` and try again.)
 
----
 
-# 3) Install dependencies
+3) Install dependencies
 
-If you have `requirements.txt`:
-
-```powershell
 pip install -r requirements.txt
-```
 
 Or install the essentials:
 
-```powershell
 pip install scrapy pymongo pandas matplotlib seaborn
-```
 
----
 
-# 4) Configure MongoDB connection
-
-Since your spider already contains:
-
-```python
-uri = "mongodb+srv://<username>:<password>@<cluster>/...appName=Cluster0"
-```
-
-you can **leave it as is** for now (since it’s already working as per your screenshot).
-Later, move it to an env var:
-
-```python
-# Replace in code if/when you switch:
-import os
-uri = os.getenv("MONGO_URI")
-```
-
-…and in PowerShell (for runs):
-
-```powershell
-$env:MONGO_URI="mongodb+srv://<username>:<password>@<cluster>/?retryWrites=true&w=majority&appName=Cluster0"
-```
-
----
-
-# 5) Run the spider (writes to MongoDB + JSON file)
+5) Run the spider (writes to MongoDB + JSON file)
 
 From the project root (where `scrapy.cfg` lives):
 
-```powershell
+Type:
+
+cd .\tutorial\
 scrapy list
-```
 
 Confirm you see `indiamart_api`. Then run:
 
-```powershell
 scrapy crawl indiamart_api -O output1.json
-```
+
 
 * `-O` overwrites `output1.json` each run (use `-o` if you want to append).
 * Your spider will also `insert_one(...)` into Atlas for each item.
 
-> If you only get \~50 items, that’s because your code limits pages:
->
-> ```python
-> if current_page < 5:
-> ```
->
-> Increase that number or implement next-page detection to crawl more pages.
-
-**Verify in Atlas:** Collections → `product_db.products` (the screenshot you shared shows it working).
-
----
-
-# 6) Run the EDA script and save plots
+6) Run the EDA script and save plots
 
 Your EDA script expects `output1.json` in the **current working directory**.
 If `product_eda.py` is in the project root and `output1.json` is also in the root:
 
-```powershell
 python product_eda.py
-```
-
-If your script is in `eda/product_eda.py`, either:
-
-* update `file_path` to `../output1.json`, **or**
-* run it from the root and pass a path arg (optional pattern):
-
-```powershell
-python eda/product_eda.py
-```
 
 **What it produces**
 
@@ -115,71 +58,3 @@ python eda/product_eda.py
 
 Open them in VS Code’s Explorer to view.
 
----
-
-# 7) Common issues & quick fixes
-
-**A. Spider doesn’t start / no requests are made**
-
-* Make sure you changed `async def start` → `def start_requests(self):`
-* Run `scrapy list` to confirm spider name is **indiamart\_api**.
-* Run with more logs:
-
-  ```powershell
-  scrapy crawl indiamart_api -O output1.json -s LOG_LEVEL=INFO
-  ```
-
-**B. Mongo connection fails**
-
-* In Atlas, *Network Access* → Add Current IP
-* In *Database Access*, ensure the user/password matches the URI
-* Try a minimal connection test in Python:
-
-  ```powershell
-  python - << 'PY'
-  from pymongo.mongo_client import MongoClient
-  from pymongo.server_api import ServerApi
-  uri = "YOUR_MONGO_URI"
-  client = MongoClient(uri, server_api=ServerApi('1'))
-  print(client.list_database_names())
-  PY
-  ```
-
-**C. Output file not found in EDA**
-
-* Ensure `file_path = "output1.json"` points to the right location relative to where you run `python`.
-
-**D. Long x-labels overlap in charts**
-
-* Your latest script already uses larger figures, `ha="right"`, and `plt.tight_layout()`—good.
-* If still crowded, limit to Top-10 (you already did for avg price), or shorten labels before plotting.
-
----
-
-# 8) (Optional) Cleaner pagination
-
-If you want to keep using a page cap but control it from the command line, tweak your spider to accept an arg:
-
-```python
-class IndiamartAPISpider(scrapy.Spider):
-    name = "indiamart_api"
-
-    def __init__(self, max_pages=5, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.max_pages = int(max_pages)
-
-    def parse(self, response):
-        # ...
-        if response.meta["pg"] < self.max_pages:
-            # build next_url and yield
-```
-
-Then run:
-
-```powershell
-scrapy crawl indiamart_api -O output1.json -a max_pages=15
-```
-
----
-
-That’s it! Follow steps 0 → 6 and you’ll (1) crawl Indiamart, (2) insert into MongoDB Atlas, (3) save `output1.json`, and (4) generate EDA plots.
