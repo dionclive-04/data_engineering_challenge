@@ -1,9 +1,7 @@
----
+````
+# Data Engineering Challenge 
 
-````markdown
-# Data Engineering Challenge 🚀
-
-## Indiamart Scraper 🛠️
+## Indiamart Scraper 🛠
 
 A Scrapy-based web scraper for extracting product data from **Indiamart** and saving it into **MongoDB Atlas**.  
 This project also demonstrates **ETL (Extract–Transform–Load)** and **EDA (Exploratory Data Analysis)** workflows.
