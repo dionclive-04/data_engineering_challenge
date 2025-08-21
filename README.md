@@ -22,3 +22,14 @@ A Scrapy-based web scraper for extracting product data from **Indiamart** and sa
 ---
 
 ## 📂 Project Structure
+
+data_eng_challenge/
+├── tutorial/
+  ├── spiders
+    ├── indiamart.py
+    ├── init.py
+│ ├── items.py # Item schema
+│ ├── middlewares.py
+│ ├── pipelines.py # Optional MongoDB pipeline
+│ ├── settings.py # Scrapy settings
+├ ├── product_eda.py
