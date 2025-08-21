@@ -1,35 +1,53 @@
-# data_engineering_challenge
+# Data Engineering Challenge 🚀
 
-# Indiamart Scraper 🛠️
+## Indiamart Scraper 🛠️
 
-A Scrapy-based web scraper for extracting product data from **Indiamart** and saving it into **MongoDB Atlas**.
+A Scrapy-based web scraper for extracting product data from **Indiamart** and saving it into **MongoDB Atlas**.  
+This project also demonstrates **ETL (Extract–Transform–Load)** and **EDA (Exploratory Data Analysis)** workflows.
 
 ---
 
-##  Features
+## ✨ Features
 - Scrapes product listings from [Indiamart](https://dir.indiamart.com)
 - Extracts details like:
-  - Product name
-  - Price
-  - Company
-  - Location
-  - Address
-  - Product link
-- Supports pagination
-- Stores data directly into MongoDB Atlas (or export as JSON/CSV)
-- Configurable search query & city
+  - ✅ Product name  
+  - ✅ Price  
+  - ✅ Company  
+  - ✅ Location  
+  - ✅ Address  
+  - ✅ Product link  
+- Handles pagination automatically  
+- Stores data directly into **MongoDB Atlas**  
+- Can also export results to **JSON/CSV**  
+- Configurable **search query** & **city**  
+- Includes **ETL pipeline** and **EDA script** for insights  
 
 ---
 
 ## 📂 Project Structure
 
-data_eng_challenge/
-├── tutorial/
-  ├── spiders
-    ├── indiamart.py
-    ├── init.py
-│ ├── items.py # Item schema
-│ ├── middlewares.py
-│ ├── pipelines.py # Optional MongoDB pipeline
-│ ├── settings.py # Scrapy settings
-├ ├── product_eda.py
+```bash
+data_engineering_challenge/
+│
+├── tutorial/                  # Scrapy project
+│   ├── spiders/
+│   │   ├── indiamart.py       # Main spider
+│   │   ├── __init__.py
+│   ├── items.py               # Item schema
+│   ├── middlewares.py         # (Optional) custom middlewares
+│   ├── pipelines.py           # MongoDB pipeline integration
+│   ├── settings.py            # Scrapy settings
+│
+├── data/                      # Output data
+│   ├── raw/                   # Raw scraped data
+│   ├── processed/             # Cleaned data
+│
+├── etl/
+│   ├── etl_pipeline.py        # ETL (cleaning & transformation)
+│
+├── eda/
+│   ├── product_eda.py         # Exploratory Data Analysis
+│   ├── product_eda.ipynb      # (Optional) Jupyter notebook
+│
+├── requirements.txt           # Python dependencies
+├── README.md                  # Project documentation
