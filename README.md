@@ -1,5 +1,3 @@
----
-
 ````markdown
 # Data Engineering Challenge 🚀
 
@@ -55,8 +53,6 @@ data_engineering_challenge/
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # Project documentation
 ````
-
----
 
 ## ⚙️ Installation & Setup
 
