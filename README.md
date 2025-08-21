@@ -1,3 +1,6 @@
+---
+
+````markdown
 # Data Engineering Challenge 🚀
 
 ## Indiamart Scraper 🛠️
@@ -51,26 +54,98 @@ data_engineering_challenge/
 │
 ├── requirements.txt           # Python dependencies
 ├── README.md                  # Project documentation
-```
+````
 
-⚙️ Installation & Setup
-1️⃣ Clone the repository
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
 git clone https://github.com/your-username/data_engineering_challenge.git
 cd data_engineering_challenge
+```
 
-2️⃣ Create a virtual environment (recommended)
+### 2️⃣ Create a virtual environment (recommended)
+
+```bash
 python -m venv venv
 source venv/bin/activate     # Mac/Linux
 venv\Scripts\activate        # Windows
+```
 
-3️⃣ Install dependencies
+### 3️⃣ Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-▶️ Usage
-Run the Indiamart Scraper
+---
+
+## ▶️ Usage
+
+### Run the Indiamart Scraper
+
+```bash
 cd tutorial
 scrapy crawl indiamart_api -o ../data/raw/indiamart.json
+```
 
-Run EDA
+### Run ETL Pipeline
+
+```bash
+python etl/etl_pipeline.py
+```
+
+### Run EDA
+
+```bash
 python eda/product_eda.py
+```
 
+or open the Jupyter notebook:
+
+```bash
+jupyter notebook eda/product_eda.ipynb
+```
+
+---
+
+## 📦 Requirements
+
+* Python 3.9+
+* Scrapy
+* pymongo
+* pandas
+* matplotlib / seaborn (for EDA)
+* jupyter (optional, for notebooks)
+
+Install everything via:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 📊 Example Output (Scraped Item)
+
+```json
+{
+  "name": "Industrial Machinery",
+  "price": "₹ 50,000",
+  "company": "ABC Engineering Pvt Ltd",
+  "location": "Bengaluru",
+  "address": "Peenya Industrial Area, Bengaluru",
+  "product_link": "https://dir.indiamart.com/product/xyz"
+}
+```
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! For major changes, open an issue first to discuss what you would like to improve.
+
+---
