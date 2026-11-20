@@ -1,3 +1,4 @@
+import os
 import scrapy
 import urllib.parse
 from pymongo.mongo_client import MongoClient
@@ -29,7 +30,7 @@ class IndiamartAPISpider(scrapy.Spider):
 
     def parse(self, response):
         products = response.css(".brs5")  # each product card
-        uri = "mongodb+srv://dionclivesaldanha22ds:VJA6iUEtGSbpYmgA@cluster0.yfwll51.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+        uri = os.environ["MONGODB_URI"]
         client = MongoClient(uri, server_api=ServerApi('1'))
 
         db = client.product_db
