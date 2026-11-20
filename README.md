@@ -1,149 +1,89 @@
-````markdown
-# Data Engineering Challenge
+# IndiaMART Product Scraper & Analysis
 
-## Indiamart Scraper 
+A Python learning project that uses Scrapy to extract product listings and pandas, Matplotlib, and seaborn to explore the exported data.
 
-A Scrapy-based web scraper for extracting product data from **Indiamart** and saving it into **MongoDB Atlas**.  
-This project also demonstrates **ETL (Extract–Transform–Load)** and **EDA (Exploratory Data Analysis)** workflows.
+## What is implemented
 
----
+- Product name, price, company, location, address, and product-link extraction.
+- Pagination across up to five search pages.
+- JSON or CSV export through Scrapy feeds.
+- Price cleaning, summary statistics, and three analysis plots.
 
-## ✨ Features
-- Scrapes product listings from [Indiamart](https://dir.indiamart.com)
-- Extracts details like:
-  -  Product name  
-  -  Price  
-  -  Company  
-  -  Location  
-  -  Address  
-  -  Product link  
-- Handles pagination automatically  
-- Stores data directly into **MongoDB Atlas**  
-- Can also export results to **JSON/CSV**  
-- Configurable **search query** & **city**  
-- Includes **ETL pipeline** and **EDA script** for insights  
+The spider currently uses a fixed search query (`industry machinery`) and city (`bengaluru`). MongoDB connection scaffolding exists, but the insert statement is commented out; database persistence is not enabled.
 
----
+## Repository structure
 
-## 📂 Project Structure
+```text
+scrapy.cfg
+tutorial/
+    items.py
+    settings.py
+    pipelines.py
+    spiders/
+        indamart_data_fetch.py
+eda.py
+requirements.txt
+code_execution_instruction
+```
 
-```bash
-data_engineering_challenge/
-│
-├── tutorial/                  # Scrapy project
-│   ├── spiders/
-│   │   ├── indiamart.py       # Main spider
-│   │   ├── __init__.py
-│   ├── items.py               # Item schema
-│   ├── middlewares.py         # (Optional) custom middlewares
-│   ├── pipelines.py           # MongoDB pipeline integration
-│   ├── settings.py            # Scrapy settings
-│
-├── data/                      # Output data
-│   ├── raw/                   # Raw scraped data
-│   ├── processed/             # Cleaned data
-│
-├── etl/
-│   ├── etl_pipeline.py        # ETL (cleaning & transformation)
-│
-├── eda/
-│   ├── product_eda.py         # Exploratory Data Analysis
-│   ├── product_eda.ipynb      # (Optional) Jupyter notebook
-│
-├── requirements.txt           # Python dependencies
-├── README.md                  # Project documentation
-````
+There is no separate ETL directory or notebook in the current repository. Data cleaning is performed by [eda.py](eda.py).
 
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the repository
+## Getting started
 
 ```bash
-git clone https://github.com/your-username/data_engineering_challenge.git
+git clone https://github.com/dionclive-04/data_engineering_challenge.git
 cd data_engineering_challenge
+python -m venv .venv
 ```
 
-### 2️⃣ Create a virtual environment (recommended)
+Activate the environment:
 
-```bash
-python -m venv venv
-source venv/bin/activate     # Mac/Linux
-venv\Scripts\activate        # Windows
-```
+- Windows PowerShell: `.\.venv\Scripts\Activate.ps1`.
+- macOS/Linux: `source .venv/bin/activate`.
 
-### 3️⃣ Install dependencies
+Then, from the repository root containing `scrapy.cfg`:
 
 ```bash
 pip install -r requirements.txt
+scrapy list
 ```
 
----
+The spider name is `indiamart_api`.
 
-## ▶️ Usage
+## Collect and analyze data
 
-### Run the Indiamart Scraper
+The spider's existing MongoDB client initialization reads `MONGODB_URI` from the environment. Configure it locally before crawling; never commit credentials. Inserts remain disabled.
+
+Only crawl a site you are authorized to access. The command below enables robots.txt handling for this run.
 
 ```bash
-cd tutorial
-scrapy crawl indiamart_api -o ../data/raw/indiamart.json
+scrapy crawl indiamart_api -s ROBOTSTXT_OBEY=True -O output1.json
+python eda.py
 ```
 
-### Run ETL Pipeline
+Keep both commands in the repository root so the analysis can find `output1.json`. The `-O` flag replaces that local output file on subsequent runs.
 
-```bash
-python etl/etl_pipeline.py
-```
+The analysis prints summary statistics and writes:
 
-### Run EDA
+- `price_distribution.png`
+- `top_products_frequency.png`
+- `avg_price.png`
 
-```bash
-python eda/product_eda.py
-```
+To export CSV instead, use `-O products.csv`. The existing analysis script requires the JSON export.
 
-or open the Jupyter notebook:
+## Limitations and next steps
 
-```bash
-jupyter notebook eda/product_eda.ipynb
-```
+- Selectors depend on the site's current HTML and may need maintenance.
+- The analysis expects non-empty data with the fields emitted by the spider.
+- Price cleaning strips non-digit characters; prices with decimals, ranges, or differing units need more careful normalization.
+- Search parameters are defined inside the spider rather than exposed as command-line arguments.
+- Add saved HTML fixtures and extraction tests before extending the scraper.
+- If enabling MongoDB writes, add connection cleanup, error handling, and duplicate prevention.
 
----
+## Credential maintenance
 
----
+Any database credential previously committed to Git must be revoked or rotated in MongoDB Atlas. Replacing the current source does not remove credentials from earlier commits.
 
-## 📦 Requirements
+## Author
 
-* Python 3.9+
-* Scrapy
-* pymongo
-* pandas
-* matplotlib / seaborn (for EDA)
-* jupyter (optional, for notebooks)
-
-Install everything via:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 📊 Example Output (Scraped Item)
-
-```json
-{
-  "name": "Industrial Machinery",
-  "price": "₹ 50,000",
-  "company": "ABC Engineering Pvt Ltd",
-  "location": "Bengaluru",
-  "address": "Peenya Industrial Area, Bengaluru",
-  "product_link": "https://dir.indiamart.com/product/xyz"
-}
-```
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome! For major changes, open an issue first to discuss what you would like to improve.
-
----
+[Dion Clive Saldanha](https://github.com/dionclive-04)
